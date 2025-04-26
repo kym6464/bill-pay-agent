@@ -6,8 +6,8 @@ Demo of the outputs: [link](https://storage.googleapis.com/kamal-screenshots/385
 
 Demo video: coming soon (after I receive next month's bill)
 
-## Instructions
+## Instructions - LASA
 
 1. Navigate to lasa.org and setup an account along with a default payment method.
 1. `cp .env.example .env` and fill out `.env`.
-1. `uv run src/main.py`
+1. `uv run src/lasa.py`
