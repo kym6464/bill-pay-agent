@@ -1,5 +1,6 @@
 .env
 .env.pvr
+runs/
 
 # Python-generated files
 __pycache__/

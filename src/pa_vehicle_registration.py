@@ -1,47 +1,86 @@
 import asyncio
 import os
+import time
 
+from pathlib import Path
 from langchain_openai import ChatOpenAI
-from browser_use import Agent
+from browser_use import Agent, Browser, BrowserConfig
+from browser_use.browser.utils.screen_resolution import get_screen_resolution
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(".env.pvr")
 sensitive_data = {
-    "CURRENT_ODOMETER_READING": os.environ["CURRENT_ODOMETER_READING"],
     "TITLE_NUMBER_FIRST_EIGHT": os.environ["TITLE_NUMBER_FIRST_EIGHT"],
     "PLATE_NUMBER": os.environ["PLATE_NUMBER"],
+    "CURRENT_ODOMETER_READING": os.environ["CURRENT_ODOMETER_READING"],
     "INSURANCE_COMPANY_NAME": os.environ["INSURANCE_COMPANY_NAME"],
     "INSURANCE_POLICY_NUMBER": os.environ["INSURANCE_POLICY_NUMBER"],
-    "INSURANCE_EFFECTIVE_DATE": os.environ["INSURANCE_EFFECTIVE_DATE"],
-    "INSURANCE_EXPIRATION_DATE": os.environ["INSURANCE_EXPIRATION_DATE"],
+    # "INSURANCE_EFFECTIVE_DATE": os.environ["INSURANCE_EFFECTIVE_DATE"],
+    "INSURANCE_EFFECTIVE_DATE_YYYY": os.environ["INSURANCE_EFFECTIVE_DATE_YYYY"],
+    "INSURANCE_EFFECTIVE_DATE_MM": os.environ["INSURANCE_EFFECTIVE_DATE_MM"],
+    "INSURANCE_EFFECTIVE_DATE_DD": os.environ["INSURANCE_EFFECTIVE_DATE_DD"],
+    # "INSURANCE_EXPIRATION_DATE": os.environ["INSURANCE_EXPIRATION_DATE"],
+    "INSURANCE_EXPIRATION_DATE_YYYY": os.environ["INSURANCE_EXPIRATION_DATE_YYYY"],
+    "INSURANCE_EXPIRATION_DATE_MM": os.environ["INSURANCE_EXPIRATION_DATE_MM"],
+    "INSURANCE_EXPIRATION_DATE_DD": os.environ["INSURANCE_EXPIRATION_DATE_DD"],
     "INSURANCE_NAIC_NUMBER": os.environ["INSURANCE_NAIC_NUMBER"],
     "EMAIL_ADDRESS": os.environ["EMAIL_ADDRESS"],
 }
 
 task = """\
 Navigate to https://www.pa.gov/services/dmv/renew-vehicle-registration.html to renew vehicle registration online.
-Login using the TITLE_NUMBER and PLATE_NUMBER.
+Login using the TITLE_NUMBER_FIRST_EIGHT and PLATE_NUMBER.
 Proceed to renew the vehicle registration for 1 year.
 
 Fill out the the form using the following variables:
 - CURRENT_ODOMETER_READING
-- TITLE_NUMBER_FIRST_EIGHT
-- PLATE_NUMBER
 - INSURANCE_COMPANY_NAME
 - INSURANCE_POLICY_NUMBER
-- INSURANCE_EFFECTIVE_DATE
-- INSURANCE_EXPIRATION_DATE
 - INSURANCE_NAIC_NUMBER
-- EMAIL_ADDRESS
+- INSURANCE_EFFECTIVE_DATE_YYYY
+- INSURANCE_EFFECTIVE_DATE_MM
+- INSURANCE_EFFECTIVE_DATE_DD
+- INSURANCE_EXPIRATION_DATE_YYYY
+- INSURANCE_EXPIRATION_DATE_MM
+- INSURANCE_EXPIRATION_DATE_DD
 
-Stop when you get to the payment page."""
+NOTE: clear any existing values before pasting new values.
+
+Check the box with the disclaimer that the registration will only be sent digitally.
+We want to send the registration to EMAIL_ADDRESS, which we will input on a later page.
+
+Stop when you successfully submit this information."""
+
+
+run_id = f"{int(time.time())}"
+
+runs_dir = Path(__file__).parent.parent.joinpath("runs")
+run_dir = runs_dir.joinpath(f"run_{run_id}")
+run_dir.mkdir(parents=True)
+conversation_path = run_dir.joinpath("conversation")
+
+# https://github.com/browser-use/browser-use/blob/fa461585f1fc2d4a430e68e6c115a12f4936fe73/browser_use/browser/browser.py#L258
+screen_size = get_screen_resolution()
+screen_size["width"] = screen_size["width"] // 2
+
+browser_config = BrowserConfig(
+    headless=False,
+    save_recording_path=str(run_dir),
+    extra_browser_args=[
+        # https://github.com/browser-use/browser-use/blob/fa461585f1fc2d4a430e68e6c115a12f4936fe73/browser_use/browser/browser.py#L268C4-L268C67
+        f"--window-size={screen_size['width']},{screen_size['height']}"
+    ],
+)
+browser = Browser(browser_config)
 
 
 async def main():
     agent = Agent(
-        task="Go to lasa.org and login to the online payment portal using LASA_USERNAME and LASA_PASSWORD. Then proceed to make a payment using the existing payment method.",
+        task=task,
         llm=ChatOpenAI(model="gpt-4o"),
         sensitive_data=sensitive_data,
+        save_conversation_path=str(conversation_path),
+        browser=browser,
     )
     await agent.run()
 
