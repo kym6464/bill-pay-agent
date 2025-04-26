@@ -1,4 +1,5 @@
 .env
+.env.pvr
 
 # Python-generated files
 __pycache__/
