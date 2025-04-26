@@ -67,6 +67,8 @@ browser_config = BrowserConfig(
     headless=False,
     save_recording_path=str(run_dir),
     extra_browser_args=[
+        # TODO this doesn't work because I guess chrome accepts the first set of arguments, which
+        # browser-use always passes. Need to submit a PR to make this configurable.
         # https://github.com/browser-use/browser-use/blob/fa461585f1fc2d4a430e68e6c115a12f4936fe73/browser_use/browser/browser.py#L268C4-L268C67
         f"--window-size={screen_size['width']},{screen_size['height']}"
     ],
