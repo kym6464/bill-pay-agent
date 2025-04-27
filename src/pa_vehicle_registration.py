@@ -4,8 +4,9 @@ import time
 
 from pathlib import Path
 from langchain_openai import ChatOpenAI
-from browser_use import Agent, Browser, BrowserConfig
-from browser_use.browser.utils.screen_resolution import get_screen_resolution
+from browser_use import Agent, Browser, BrowserContextConfig
+from browser_use.browser.context import BrowserContext
+
 from dotenv import load_dotenv
 
 load_dotenv(".env.pvr")
@@ -15,11 +16,9 @@ sensitive_data = {
     "CURRENT_ODOMETER_READING": os.environ["CURRENT_ODOMETER_READING"],
     "INSURANCE_COMPANY_NAME": os.environ["INSURANCE_COMPANY_NAME"],
     "INSURANCE_POLICY_NUMBER": os.environ["INSURANCE_POLICY_NUMBER"],
-    # "INSURANCE_EFFECTIVE_DATE": os.environ["INSURANCE_EFFECTIVE_DATE"],
     "INSURANCE_EFFECTIVE_DATE_YYYY": os.environ["INSURANCE_EFFECTIVE_DATE_YYYY"],
     "INSURANCE_EFFECTIVE_DATE_MM": os.environ["INSURANCE_EFFECTIVE_DATE_MM"],
     "INSURANCE_EFFECTIVE_DATE_DD": os.environ["INSURANCE_EFFECTIVE_DATE_DD"],
-    # "INSURANCE_EXPIRATION_DATE": os.environ["INSURANCE_EXPIRATION_DATE"],
     "INSURANCE_EXPIRATION_DATE_YYYY": os.environ["INSURANCE_EXPIRATION_DATE_YYYY"],
     "INSURANCE_EXPIRATION_DATE_MM": os.environ["INSURANCE_EXPIRATION_DATE_MM"],
     "INSURANCE_EXPIRATION_DATE_DD": os.environ["INSURANCE_EXPIRATION_DATE_DD"],
@@ -51,29 +50,16 @@ We want to send the registration to EMAIL_ADDRESS, which we will input on a late
 
 Stop when you successfully submit this information."""
 
-
 run_id = f"{int(time.time())}"
-
 runs_dir = Path(__file__).parent.parent.joinpath("runs")
 run_dir = runs_dir.joinpath(f"run_{run_id}")
 run_dir.mkdir(parents=True)
+print(f"Created run directory: {run_dir}")
 conversation_path = run_dir.joinpath("conversation")
 
-# https://github.com/browser-use/browser-use/blob/fa461585f1fc2d4a430e68e6c115a12f4936fe73/browser_use/browser/browser.py#L258
-screen_size = get_screen_resolution()
-screen_size["width"] = screen_size["width"] // 2
-
-browser_config = BrowserConfig(
-    headless=False,
-    save_recording_path=str(run_dir),
-    extra_browser_args=[
-        # TODO this doesn't work because I guess chrome accepts the first set of arguments, which
-        # browser-use always passes. Need to submit a PR to make this configurable.
-        # https://github.com/browser-use/browser-use/blob/fa461585f1fc2d4a430e68e6c115a12f4936fe73/browser_use/browser/browser.py#L268C4-L268C67
-        f"--window-size={screen_size['width']},{screen_size['height']}"
-    ],
-)
-browser = Browser(browser_config)
+browser = Browser()
+browser_context_config = BrowserContextConfig(save_recording_path=str(run_dir))
+browser_context = BrowserContext(browser, browser_context_config)
 
 
 async def main():
@@ -82,7 +68,7 @@ async def main():
         llm=ChatOpenAI(model="gpt-4o"),
         sensitive_data=sensitive_data,
         save_conversation_path=str(conversation_path),
-        browser=browser,
+        browser_context=browser_context,
     )
     await agent.run()
 
