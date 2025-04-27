@@ -9,6 +9,7 @@ from browser_use.browser.context import BrowserContext
 
 from dotenv import load_dotenv
 
+load_dotenv(".env")
 load_dotenv(".env.pvr")
 sensitive_data = {
     "TITLE_NUMBER_FIRST_EIGHT": os.environ["TITLE_NUMBER_FIRST_EIGHT"],
@@ -65,7 +66,9 @@ first need to select "I would like to check out" and check the confirmation
 box before you are able to enter the email address.
 
 Fill out the information on the payment page.
-The credit card state is {os.environ["CREDIT_CARD_ADDRESS_STATE"]}."""
+The credit card state is {os.environ["CREDIT_CARD_ADDRESS_STATE"]}.
+
+"""
 
 run_id = f"{int(time.time())}"
 runs_dir = Path(__file__).parent.parent.joinpath("runs")

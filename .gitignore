@@ -1,5 +1,6 @@
 .env
 .env.pvr
+.env.lasa
 runs/
 .DS_Store
 
