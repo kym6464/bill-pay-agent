@@ -16,13 +16,13 @@ sensitive_data = {
     "CURRENT_ODOMETER_READING": os.environ["CURRENT_ODOMETER_READING"],
     "INSURANCE_COMPANY_NAME": os.environ["INSURANCE_COMPANY_NAME"],
     "INSURANCE_POLICY_NUMBER": os.environ["INSURANCE_POLICY_NUMBER"],
+    "INSURANCE_NAIC_NUMBER": os.environ["INSURANCE_NAIC_NUMBER"],
     "INSURANCE_EFFECTIVE_DATE_YYYY": os.environ["INSURANCE_EFFECTIVE_DATE_YYYY"],
     "INSURANCE_EFFECTIVE_DATE_MM": os.environ["INSURANCE_EFFECTIVE_DATE_MM"],
     "INSURANCE_EFFECTIVE_DATE_DD": os.environ["INSURANCE_EFFECTIVE_DATE_DD"],
     "INSURANCE_EXPIRATION_DATE_YYYY": os.environ["INSURANCE_EXPIRATION_DATE_YYYY"],
     "INSURANCE_EXPIRATION_DATE_MM": os.environ["INSURANCE_EXPIRATION_DATE_MM"],
     "INSURANCE_EXPIRATION_DATE_DD": os.environ["INSURANCE_EXPIRATION_DATE_DD"],
-    "INSURANCE_NAIC_NUMBER": os.environ["INSURANCE_NAIC_NUMBER"],
     "EMAIL_ADDRESS": os.environ["EMAIL_ADDRESS"],
 }
 
@@ -48,7 +48,10 @@ NOTE: clear any existing values before filling in new values.
 Check the box with the disclaimer that the registration will only be sent digitally.
 We want to send the registration to EMAIL_ADDRESS, which we will input on a later page.
 
-Stop when you successfully submit this information."""
+Decline any requests for donations and continue.
+
+Stop after you've entered the EMAIL_ADDRESS. 
+Do NOT hit continue after entering the email address."""
 
 run_id = f"{int(time.time())}"
 runs_dir = Path(__file__).parent.parent.joinpath("runs")
