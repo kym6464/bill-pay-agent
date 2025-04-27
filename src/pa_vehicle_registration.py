@@ -43,7 +43,7 @@ Fill out the the form using the following variables:
 - INSURANCE_EXPIRATION_DATE_MM
 - INSURANCE_EXPIRATION_DATE_DD
 
-NOTE: clear any existing values before pasting new values.
+NOTE: clear any existing values before filling in new values.
 
 Check the box with the disclaimer that the registration will only be sent digitally.
 We want to send the registration to EMAIL_ADDRESS, which we will input on a later page.
