@@ -26,7 +26,3 @@ The goal is to have an AI renew my vehicle registration. This is something that 
 
 1. `cp .env.pvr.example .env.pvr` and fill out `.env.pvr`.
 1. `uv run src/pa_vehicle_registration.py`
-
-## Dependencies
-
-`browser-use` is pinned to the latest in https://github.com/browser-use/browser-use
