@@ -1,8 +1,11 @@
-.env
-.env.pvr
-.env.lasa
 runs/
 .DS_Store
+
+# Ignore all .env files
+.env
+.env.*
+# But allow .env.*.example files
+!.env.*.example
 
 # Python-generated files
 __pycache__/
