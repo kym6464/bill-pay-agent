@@ -1,10 +1,10 @@
 [project]
-name = "bill-pay"
+name = "browser-agent"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "browser-use>=0.1.41",
+    "browser-use@git+ssh://git@github.com/browser-use/browser-use.git",
     "ruff>=0.11.6",
 ]
