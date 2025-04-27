@@ -1,6 +1,7 @@
 .env
 .env.pvr
 runs/
+.DS_Store
 
 # Python-generated files
 __pycache__/
