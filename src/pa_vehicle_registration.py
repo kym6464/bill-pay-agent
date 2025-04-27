@@ -58,7 +58,10 @@ print(f"Created run directory: {run_dir}")
 conversation_path = run_dir.joinpath("conversation")
 
 browser = Browser()
-browser_context_config = BrowserContextConfig(save_recording_path=str(run_dir))
+browser_context_config = BrowserContextConfig(
+    save_recording_path=str(run_dir),
+    keep_alive=True,
+)
 browser_context = BrowserContext(browser, browser_context_config)
 
 
