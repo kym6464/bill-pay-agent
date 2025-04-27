@@ -24,9 +24,19 @@ sensitive_data = {
     "INSURANCE_EXPIRATION_DATE_MM": os.environ["INSURANCE_EXPIRATION_DATE_MM"],
     "INSURANCE_EXPIRATION_DATE_DD": os.environ["INSURANCE_EXPIRATION_DATE_DD"],
     "EMAIL_ADDRESS": os.environ["EMAIL_ADDRESS"],
+    "CREDIT_CARD_NUMBER": os.environ["CREDIT_CARD_NUMBER"],
+    "CREDIT_CARD_EXPIRATION_MM": os.environ["CREDIT_CARD_EXPIRATION_MM"],
+    "CREDIT_CARD_EXPIRATION_YY": os.environ["CREDIT_CARD_EXPIRATION_YY"],
+    "CREDIT_CARD_EXPIRATION_YYYY": os.environ["CREDIT_CARD_EXPIRATION_YYYY"],
+    "CREDIT_CARD_SECURITY_CODE": os.environ["CREDIT_CARD_SECURITY_CODE"],
+    "CREDIT_CARD_CARDHOLDER_NAME": os.environ["CREDIT_CARD_CARDHOLDER_NAME"],
+    "CREDIT_CARD_ADDRESS_STREET": os.environ["CREDIT_CARD_ADDRESS_STREET"],
+    "CREDIT_CARD_ADDRESS_CITY": os.environ["CREDIT_CARD_ADDRESS_CITY"],
+    "CREDIT_CARD_ADDRESS_STATE": os.environ["CREDIT_CARD_ADDRESS_STATE"],
+    "CREDIT_CARD_ADDRESS_ZIP": os.environ["CREDIT_CARD_ADDRESS_ZIP"],
 }
 
-task = """\
+task = f"""\
 Navigate to https://www.pa.gov/services/dmv/renew-vehicle-registration.html to renew vehicle registration online.
 Login using the TITLE_NUMBER_FIRST_EIGHT and PLATE_NUMBER.
 Proceed to renew the vehicle registration for 1 year.
@@ -54,8 +64,8 @@ On the Shopping Cart page, where you are asked to enter the EMAIL_ADDRESS, you
 first need to select "I would like to check out" and check the confirmation
 box before you are able to enter the email address.
 
-Stop after you've entered the email address. 
-Do NOT hit continue after entering the email address."""
+Fill out the information on the payment page.
+The credit card state is {os.environ["CREDIT_CARD_ADDRESS_STATE"]}."""
 
 run_id = f"{int(time.time())}"
 runs_dir = Path(__file__).parent.parent.joinpath("runs")
@@ -68,6 +78,7 @@ browser = Browser()
 browser_context_config = BrowserContextConfig(
     save_recording_path=str(run_dir),
     keep_alive=True,
+    wait_for_network_idle_page_load_time=3,
 )
 browser_context = BrowserContext(browser, browser_context_config)
 
