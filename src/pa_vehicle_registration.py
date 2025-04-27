@@ -50,7 +50,11 @@ We want to send the registration to EMAIL_ADDRESS, which we will input on a late
 
 Decline any requests for donations and continue.
 
-Stop after you've entered the EMAIL_ADDRESS. 
+On the Shopping Cart page, where you are asked to enter the EMAIL_ADDRESS, you
+first need to select "I would like to check out" and check the confirmation
+box before you are able to enter the email address.
+
+Stop after you've entered the email address. 
 Do NOT hit continue after entering the email address."""
 
 run_id = f"{int(time.time())}"
