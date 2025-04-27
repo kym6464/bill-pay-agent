@@ -77,6 +77,7 @@ async def main():
         browser_context=browser_context,
     )
     await agent.run()
+    input("Done! Press any key to exit...")
 
 
 asyncio.run(main())
